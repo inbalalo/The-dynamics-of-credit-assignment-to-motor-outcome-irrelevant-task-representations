@@ -26,15 +26,13 @@ plot(density(df$long_rt))
 sum(df$long_rt>=0.1)
 
 #check short rt probability
-df<-tab[,mean(rt<200), by=subj]
+df<-tab[,mean(rt<200)>0.1, by=subj]
 colnames(df) <- c("subject", "short_rt")
-plot(density(df$short_rt))
-sum(df$short_rt>=0.15)
+sum(df$short_rt)
 #abort participants with short rt
-df$abort<-df$short_rt>=0.15
-df<-df[abort==FALSE]
-tab<-tab[subj==c(rep(df$subject, each=200))]
-tab$abort_trl<-rep(0, dim(tab)[1])
-tab$abort_trl[tab$trl==1|tab$rt<200]<-1
+tab<-tab[tab$subj %in% df[df$short_rt==FALSE]$subj]
 #abort short trials
-tab<-tab[abort_trl==0]
+tab<-tab[rt>200]
+
+#abort first trial of every block
+tab<-tab[trl>1]
