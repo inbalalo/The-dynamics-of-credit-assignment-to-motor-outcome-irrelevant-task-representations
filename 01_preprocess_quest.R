@@ -1,14 +1,20 @@
 rm(list=ls())
 library(data.table)
+library(stringr)
 source('11_myfunc.R')
 
 folder<-'myfolder/02_raw_data'
-sub_folder<-'myfolder/03_raw_data'
+sub_folder<-'myfolder/03_raw_clean_data'
 names<-c('bdi', 'oci', 'stai', 'spq')
 
-#add columns to the self reports 
+#vector to clean bad participants
+tab<-read.csv(paste(sub_folder, '/', '01_tab','.csv', sep=""))
+good_subj<-tab$subj
+good_subj<-good_subj[!duplicated(good_subj)]
+
+#clean bad subjects+add sum columns
 for (i in 1:length(names)){
-  assign(names[i], sum_statements(names[i], folder))
+  assign(names[i], sum_statements(names[i], folder, good_subj))
 }
 
 plot(hist(oci$sum))
