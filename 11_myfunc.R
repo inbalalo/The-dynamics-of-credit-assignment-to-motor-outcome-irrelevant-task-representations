@@ -29,8 +29,12 @@ sum_statements<-function(name, folder, good_subj) {
   return(quest)
 }
 
+add_exported_data<-function(quest, exported_file){
+  df<-merge(quest, exported_file[,c(2,7,21)])
+  return(df)
+}
+
 save_data<-function(data, name, folder){
   write.csv(data, paste(folder, '/', '01_', name, '.csv', sep=""), row.names=FALSE)
   return()
 }
-  
